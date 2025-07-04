@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reproductor de Video Personalizado</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    video {
+      width: 80%;
+      max-width: 800px;
+      margin-top: 20px;
+    }
+    #controls {
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Sube tu Video</h1>
+  <input type="file" id="videoUpload" accept="video/*"><br>
+
+  <video id="videoPlayer" controls></video>
+
+  <div id="controls">
+    <button id="loopToggle">Activar Repetición Infinita</button>
+    <button onclick="toggleFullScreen()">Pantalla Completa</button>
+  </div>
+
+  <script>
+    const video = document.getElementById('videoPlayer');
+    const loopButton = document.getElementById('loopToggle');
+    const uploadInput = document.getElementById('videoUpload');
+
+    // Cargar video desde el archivo subido
+    uploadInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const videoURL = URL.createObjectURL(file);
+        video.src = videoURL;
+        video.load();
+        video.play();
+      }
+    });
+
+    // Activar / desactivar loop
+    loopButton.addEventListener('click', () => {
+      video.loop = !video.loop;
+      loopButton.textContent = video.loop ? 'Desactivar Repetición Infinita' : 'Activar Repetición Infinita';
+    });
+
+    // Pantalla completa
+    function toggleFullScreen() {
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+      } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
+      }
+    }
+
+    // Reiniciar video con F1
+    document.addEventListener('keydown', function (e) {
+      if (e.key === "F1") {
+        e.preventDefault(); // Evita que se abra la ayuda del navegador
+        video.currentTime = 0;
+        video.play();
+      }
+    });
+  </script>
+
+</body>
+</html>
